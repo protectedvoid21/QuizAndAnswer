@@ -1,0 +1,25 @@
+﻿@model bool[]
+
+@{
+    Layout = "_Layout";
+    IEnumerable<Question> questionList = (IEnumerable<Question>)ViewData["QuestionList"];
+    int index = 0;
+
+    string Translate(bool condition) {
+        return condition ? "Prawda" : "Fałsz";
+    }
+}
+
+<h2>Liczba punktów @ViewData["Points"] na @ViewData["MaxPoints"]</h2>
+@foreach(var question in questionList) {
+    <h2>@question.QuestionDesc</h2>
+    <h4>Poprawna odpowiedź : @Translate(question.IsCorrect)</h4>
+    <h4>Udzielona odpowiedź : @Translate(Model[index])</h4>
+    @if (question.IsCorrect == Model[index]) {
+        <h3 style="color: green">Punkty : @question.Points</h3>
+    }
+    else {
+        <h3 style="color: red">Punkty : 0</h3>
+    }
+    index++;
+}

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Question>
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Question database";
+}
+
+<head>
+    <style>
+        .db-table {
+            width: 100%;
+        }
+        
+        .table-headers {
+            background-color: #8a8a8a;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .question-desc {
+            padding-left: 5px;
+        }
+
+        .is-correct {
+            color: white;
+            font-weight: bold;
+        }
+        .true {
+            background-color: #00ff21;
+        }
+        .false {
+            background-color: red;
+        }
+    </style>
+</head>
+<table class="table-bordered db-table">
+    <tr class="table-headers">
+        <td>Id</td>
+        <td>Description</td>
+        <td>Answer</td>
+        <td>Actions</td>
+        <td>Points</td>
+    </tr>
+    @foreach(var Question in Model) {
+        <tr>
+            <td class="text-center">@Question.Id</td>
+            <td class="question-desc">@Question.QuestionDesc</td>
+            @if(Question.IsCorrect) {
+                <td class="true is-correct">True</td>
+            }
+            else {
+                <td class="false is-correct">False</td>
+            }
+            <td>
+                <a asp-controller="Quiz" asp-action="Edit" asp-route-id="@Question.Id">Edit</a>
+                <a asp-controller="Quiz" asp-action="Delete" asp-route-id="@Question.Id" onclick="return confirm('Are you sure you want to delete question with id : @Question.Id')">
+                Delete</a>
+            </td>
+            <td>@Question.Points</td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,25 @@
+﻿@model Question 
+
+@{ 
+    Layout = "_Layout";
+}
+
+<h2>Add question</h2>
+<form asp-controller="Quiz" asp-action="AddQuestion" method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="form-group">
+        <label asp-for="QuestionDesc">Description</label><br />
+        <div><span asp-validation-for="QuestionDesc"></span></div>
+        <textarea asp-for="QuestionDesc"></textarea><br />
+    </div>
+    <div class="form-group">
+        <label asp-for="IsCorrect">Is it true?</label>
+        <input asp-for="IsCorrect" type="checkbox" /><br />
+    </div>
+    <div class="form-group">
+        <label asp-for="Points">Points</label>
+        <div><span asp-validation-for="Points"></span></div>
+        <input asp-for="Points" /><br />
+    </div>
+        <input type="submit" content="Add">
+</form>

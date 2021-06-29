@@ -1,0 +1,14 @@
+﻿@model Question
+
+@{ 
+    Layout = "_Layout";
+}
+
+<h2>Question added correctly</h2>
+<h3>New question data : </h3>
+<h4>Description : </h4>
+<p>@Model.QuestionDesc</p>
+<h4>Is it correct?</h4>
+<p>@Model.IsCorrect</p>
+<h4>Number of points</h4>
+<p>@Model.Points</p>

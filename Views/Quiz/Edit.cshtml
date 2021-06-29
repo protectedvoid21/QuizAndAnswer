@@ -1,0 +1,22 @@
+﻿@model Question
+
+@{ 
+    Layout = "_Layout";
+    ViewData["Title"] = "Edit question";
+}
+
+<form asp-controller="Quiz" asp-action="Edit" method="post">
+    <div class="form-group">
+        <label asp-for="QuestionDesc"></label><br />
+        <textarea asp-for="QuestionDesc"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="IsCorrect"></label><br />
+        <input type="checkbox" asp-for="IsCorrect"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Points"></label><br />
+        <input asp-for="Points" />
+    </div>
+    <input type="submit" content="Zatwierdź"/>
+</form>

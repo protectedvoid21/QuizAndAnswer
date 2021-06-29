@@ -1,0 +1,16 @@
+﻿@model Question
+
+@{ 
+    Layout = "_Layout";
+    ViewData["Title"] = "Question edited correctly!";
+}
+
+<div class="text-center">
+    <h2>Question has been edited!</h2>
+    <h4>New question data :</h4>
+    <p>Id : @Model.Id</p>
+    <p>Description : <br /> @Model.QuestionDesc</p>
+    <p>Answer : @Model.IsCorrect</p>
+    <p>Points : @Model.Points</p>
+    <a asp-controller="Quiz" asp-action="QuizList"><input class="btn-outline-success" type="button" value="Go back to Quiz Database"/></a>
+</div>  

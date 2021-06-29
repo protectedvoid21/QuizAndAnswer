@@ -1,0 +1,14 @@
+﻿@{ 
+    Layout = "_Layout";
+}
+
+<style>
+    .option-list li a {
+        font-size: 2em;
+    }
+</style>
+
+<ul class="option-list">
+    <li><a asp-action="QuizList" asp-controller="Quiz">Database records</a></li>
+    <li><a asp-action="AddQuestion" asp-controller="Quiz">Add new question</a></li>
+</ul>
