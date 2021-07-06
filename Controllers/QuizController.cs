@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QuizAndAnswer.Controllers {
     public class QuizController : Controller {
-        private QuestionDbContext questionContext;
+        private readonly QuestionDbContext questionContext;
 
         private static List<Question> questionList;
         private static bool isRandomized;

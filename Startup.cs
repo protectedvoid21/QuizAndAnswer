@@ -22,7 +22,15 @@ namespace QuizAndAnswer {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            services.AddDbContext<QuestionDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<QuestionDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Questions")));
+            services.AddDbContext<IdentityAppContext>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("Users"));
+            });
+
+            services.AddIdentity<AppUser, AppRole>(options => {
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequireNonAlphanumeric = false;
+            }).AddEntityFrameworkStores<IdentityAppContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +48,7 @@ namespace QuizAndAnswer {
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {

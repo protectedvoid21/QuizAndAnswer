@@ -1,0 +1,26 @@
+﻿@model AppUser
+
+@{ 
+    Layout = "_Layout";
+}
+
+<form asp-controller="Account" asp-action="Register" method="post">
+    <p class="text-danger">@ViewBag.Message</p>
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="form-group">
+        <label>UserName</label>
+        <div><span asp-validation-for="@Model.UserName" class="text-danger"></span></div>
+        <input asp-for="@Model.UserName" />
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <div><span asp-validation-for="@Model.Email" class="text-danger"></span></div>
+        <input asp-for="@Model.Email" />
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <div><span asp-validation-for="@Model.PasswordHash" class="text-danger"></span></div>
+        <input asp-for="@Model.PasswordHash" type="password"/>
+    </div>
+    <input type="submit" />
+</form>

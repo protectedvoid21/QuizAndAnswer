@@ -1,0 +1,19 @@
+﻿@model QuizAndAnswer.Models.Account.LoginViewModel
+
+@{ 
+    Layout = "_Layout";
+}
+
+<form asp-controller="Account" asp-action="Login" method="post">
+    <div class="form-group">
+        <label>Email</label>
+        <div><span asp-validation-for="@Model.Email" class="text-danger"></span></div>
+        <input asp-for="@Model.Email" />
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <div><span asp-validation-for="@Model.Password" class="text-danger"></span></div>
+        <input asp-for="@Model.Password" type="password"/>
+    </div>
+    <input type="submit" />
+</form>
