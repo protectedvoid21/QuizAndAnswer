@@ -9,6 +9,7 @@ namespace QuizAndAnswer.Models {
         public QuestionDbContext(DbContextOptions<QuestionDbContext> options) : base(options) { }
 
         public DbSet<Question> Quiz { get; set; }
+        public DbSet<UserQuestionData> UserData { get; set; }
 
         public Question GetQuestionById(int id) {
             return Quiz.ToArray()[id];

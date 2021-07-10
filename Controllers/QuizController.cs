@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using QuizAndAnswer.Models;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,14 @@ using System.Threading.Tasks;
 namespace QuizAndAnswer.Controllers {
     public class QuizController : Controller {
         private readonly QuestionDbContext questionContext;
+        private readonly UserManager<AppUser> userManager;
 
         private static List<Question> questionList;
         private static bool isRandomized;
 
-        public QuizController(QuestionDbContext questionContext) {
+        public QuizController(QuestionDbContext questionContext, UserManager<AppUser> userManager) {
             this.questionContext = questionContext;
+            this.userManager = userManager;
         }
 
         public ViewResult QuizList() {
@@ -102,7 +105,7 @@ namespace QuizAndAnswer.Controllers {
         }
 
         [HttpPost]
-        public IActionResult Test(bool[] answerList) {
+        public async Task<IActionResult> Test(bool[] answerList) {
             if(!ModelState.IsValid) {
                 return RedirectToAction("Test");
             }
@@ -117,11 +120,34 @@ namespace QuizAndAnswer.Controllers {
                     points += questionList[i].Points;
                 }
             }
+            int dataId;
+            if(questionContext.UserData.Any()) {
+                dataId = questionContext.UserData.ToArray().Last().Id + 1;
+            }
+            else {
+                dataId = 1;
+            }
+
+            int userId = int.Parse(userManager.GetUserId(HttpContext.User));
+            await questionContext.UserData.AddAsync(new UserQuestionData {
+                Id = dataId,
+                UserId = userId,
+                SubmitDate = DateTime.Now,
+                CorrectPoints = points,
+                MaxPoints = maxPoints,
+            });
+            await questionContext.SaveChangesAsync();
 
             ViewData["Points"] = points;
             ViewData["MaxPoints"] = maxPoints;
             ViewData["QuestionList"] = questionList;
             return View("AnswerList", answerList);
+        }
+
+        public ViewResult UserQuizStats() {
+            int userId = int.Parse(userManager.GetUserId(HttpContext.User));
+            IEnumerable<UserQuestionData> questions = questionContext.UserData.Where(p => p.UserId == userId);
+            return View(questions);
         }
     }
 }

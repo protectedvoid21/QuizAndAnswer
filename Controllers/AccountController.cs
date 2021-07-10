@@ -22,6 +22,7 @@ namespace QuizAndAnswer.Controllers {
             return View();
         }
 
+        [HttpPost]
         public async Task<IActionResult> Register(AppUser user) {
             if(!ModelState.IsValid) {
                 return View();
@@ -62,7 +63,6 @@ namespace QuizAndAnswer.Controllers {
 
             AppUser userByEmail = await userManager.FindByEmailAsync(loginModel.Email);
             var result = await signInManager.PasswordSignInAsync(userByEmail, loginModel.Password, false, false);
-            Console.WriteLine(result);
 
             if(result.Succeeded) {
                 return RedirectToAction("Index", "Home");

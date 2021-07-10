@@ -1,0 +1,31 @@
+﻿@model IEnumerable<UserQuestionData>
+
+@{ 
+    Layout = "_Layout";
+    int index = 1;
+}
+
+@if(Model == null) {
+    <h3 class="text-center">No data available.</h3>
+}
+else { 
+<table class="table">
+    <tr>
+        <th>Nr</th>
+        <th>Date</th>
+        <th>Correct answers</th>
+        <th>Number of questions</th>
+        <th>Correct percent</th>
+    </tr> 
+    @foreach (var questionData in Model) {
+        <tr>
+            <th>@index</th>
+            <th>@questionData.SubmitDate</th>
+            <th>@questionData.CorrectPoints</th>
+            <th>@questionData.MaxPoints</th>
+            <th>@questionData.CorrectPercent()%</th>
+        </tr>
+        index++;
+    }
+</table>
+}

@@ -13,7 +13,5 @@ namespace QuizAndAnswer.Models {
         public override string PasswordHash { get; set; }
         [Required]
         public override string Email { get; set; }
-
-        public List<UserQuestionData> UserQuestions { get; set; }
     }
 }

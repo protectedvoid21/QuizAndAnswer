@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizAndAnswer.Models;
 
 namespace QuizAndAnswer.Migrations.IdentityApp
 {
     [DbContext(typeof(IdentityAppContext))]
-    partial class IdentityAppContextModelSnapshot : ModelSnapshot
+    [Migration("20210707203143_QuestionDataChange")]
+    partial class QuestionDataChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,6 +221,32 @@ namespace QuizAndAnswer.Migrations.IdentityApp
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("QuizAndAnswer.Models.UserQuestionData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CorrectPoints")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxPoints")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SubmitDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("UserQuestionData");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("QuizAndAnswer.Models.AppRole", null)
@@ -268,6 +296,18 @@ namespace QuizAndAnswer.Migrations.IdentityApp
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("QuizAndAnswer.Models.UserQuestionData", b =>
+                {
+                    b.HasOne("QuizAndAnswer.Models.AppUser", null)
+                        .WithMany("UserQuestions")
+                        .HasForeignKey("AppUserId");
+                });
+
+            modelBuilder.Entity("QuizAndAnswer.Models.AppUser", b =>
+                {
+                    b.Navigation("UserQuestions");
                 });
 #pragma warning restore 612, 618
         }
