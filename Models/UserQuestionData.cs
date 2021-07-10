@@ -11,6 +11,7 @@ namespace QuizAndAnswer.Models {
         public DateTime SubmitDate { get; set; }
         public int CorrectPoints { get; set; }
         public int MaxPoints { get; set; }
+        public int QuestionCount { get; set; }
 
         public int CorrectPercent() {
             return (int)((float)CorrectPoints / MaxPoints * 100);

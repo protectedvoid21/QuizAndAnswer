@@ -12,7 +12,6 @@ namespace QuizAndAnswer.Controllers {
         private readonly UserManager<AppUser> userManager;
 
         private static List<Question> questionList;
-        private static bool isRandomized;
 
         public QuizController(QuestionDbContext questionContext, UserManager<AppUser> userManager) {
             this.questionContext = questionContext;
@@ -69,38 +68,38 @@ namespace QuizAndAnswer.Controllers {
             questionContext.SaveChanges();
             return RedirectToAction("QuizList");
         }
-        
+
+        public ViewResult PrepareTest() {
+            return View();
+        }
+
         [HttpGet]
-        public ViewResult Test() {
-            if (!isRandomized) {
-                isRandomized = true;
-
-                List<Question> dbList = questionContext.Quiz.ToList();
-                int randomCount = 5;
-                List<Question> examList = new List<Question>();
-
-
-                while (randomCount != 0) {
-                    Random rng = new Random();
-                    Question selectedQuestion = dbList[rng.Next(0, dbList.Count)];
-                    bool isRepeated = false;
-
-                    foreach (var question in examList) {
-                        if (question == selectedQuestion) {
-                            isRepeated = true;
-                            break;
-                        }
-                    }
-                    if (!isRepeated) {
-                        examList.Add(selectedQuestion);
-                        randomCount--;
-                    }
-                }
-                questionList = examList;
+        public ViewResult Test(int questionCount) {
+            if (questionCount <= 0) {
+                ModelState.AddModelError("", "The entered value is below or equal 0");
+                return View("PrepareTest");
+            }
+            if(questionCount > questionContext.Quiz.Count()) {
+                ModelState.AddModelError("", "The entered value is bigger than the count of questions in database");
+                return View("PrepareTest");
             }
 
-            ViewBag.QuizList = questionList;
-            bool[] answerList = new bool[questionList.Count];
+            List<Question> dbList = questionContext.Quiz.ToList();
+            List<Question> examList = new List<Question>();
+
+            while (questionCount != 0) {
+                Random rng = new Random();
+                Question selectedQuestion = dbList[rng.Next(0, dbList.Count)];
+
+                if (!examList.Contains(selectedQuestion)) {
+                    examList.Add(selectedQuestion);
+                    questionCount--;
+                }
+            }
+
+            questionList = examList;
+            ViewBag.QuizList = examList;
+            bool[] answerList = new bool[examList.Count];
             return View(answerList);
         }
 
@@ -109,7 +108,6 @@ namespace QuizAndAnswer.Controllers {
             if(!ModelState.IsValid) {
                 return RedirectToAction("Test");
             }
-            isRandomized = false;
 
             int points = 0;
             int maxPoints = 0;
@@ -135,6 +133,7 @@ namespace QuizAndAnswer.Controllers {
                 SubmitDate = DateTime.Now,
                 CorrectPoints = points,
                 MaxPoints = maxPoints,
+                QuestionCount = questionList.Count(),
             });
             await questionContext.SaveChangesAsync();
 

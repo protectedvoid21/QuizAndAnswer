@@ -11,6 +11,7 @@
 }
 
 <h2>Liczba punktów @ViewData["Points"] na @ViewData["MaxPoints"]</h2>
+<h2>Liczba pytań : @Model.Count()</h2>
 @foreach(var question in questionList) {
     <h2>@question.QuestionDesc</h2>
     <h4>Poprawna odpowiedź : @Translate(question.IsCorrect)</h4>

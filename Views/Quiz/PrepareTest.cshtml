@@ -1,0 +1,19 @@
+﻿@model int
+
+@{ 
+    Layout = "_Layout";
+    ViewData["Title"] = "Specify number of questions";
+}
+
+<style>
+    .adjust-margin {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+</style>
+<form asp-controller="Quiz" asp-action="Test" method="get">
+    <div asp-validation-summary="All"></div>
+    <label>Specify number of questions : </label>
+    <input name="questionCount" asp-for="@Model" class="input-group-text adjust-margin" />
+    <input type="submit" value="Start test" class="btn btn-primary" />
+</form>
