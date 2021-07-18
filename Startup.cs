@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using QuizAndAnswer.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace QuizAndAnswer {
     public class Startup {
@@ -25,6 +26,11 @@ namespace QuizAndAnswer {
             services.AddDbContext<QuestionDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Questions")));
             services.AddDbContext<IdentityAppContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("Users"));
+            });
+
+            services.ConfigureApplicationCookie(config => {
+                config.Cookie.Name = "Identity.Cookie";
+                config.LoginPath = "/Account/Login";
             });
 
             services.AddIdentity<AppUser, AppRole>(options => {

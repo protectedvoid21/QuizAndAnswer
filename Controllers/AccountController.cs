@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuizAndAnswer.Models;
 using QuizAndAnswer.Models.Account;
@@ -68,6 +69,41 @@ namespace QuizAndAnswer.Controllers {
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.NotValidMessage = "Incorrect email or password!";
+            return View();
+        }
+
+        [Authorize]
+        public async Task<ViewResult> Informations() {
+            AppUser user = await userManager.GetUserAsync(User);
+            return View(user);
+        }
+
+        [HttpGet, Authorize]
+        public ViewResult ChangePassword() {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel passwordViewModel) {
+            if(!ModelState.IsValid) {
+                return View();
+            }
+
+            AppUser user = await userManager.GetUserAsync(HttpContext.User);
+            IdentityResult result = await userManager.ChangePasswordAsync(user, passwordViewModel.CurrentPassword, passwordViewModel.NewPassword);
+
+            if(!result.Succeeded) {
+                foreach(var error in result.Errors) {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return View();
+            }
+
+            return RedirectToAction("PasswordChanged");
+        }
+
+        [Authorize]
+        public ViewResult PasswordChanged() {
             return View();
         }
 

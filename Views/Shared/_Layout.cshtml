@@ -24,15 +24,20 @@
                         <li class="nav-item mr-auto">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if (User.Identity.IsAuthenticated) {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Quiz" asp-action="MainQuizDb">Quiz Database</a>
-                            </li>
+                        @if(User.Identity.IsAuthenticated) {
+                            if(User.IsInRole("Admin")) {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Quiz" asp-action="MainQuizDb">Quiz Database</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Panel">Admin panel</a>
+                                </li>
+                            }
                             <li class="nav-item mr-auto">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Quiz" asp-action="PrepareTest">Test yourself</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark">Hello @User.Identity.Name!</a>
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Informations">Hello @User.Identity.Name!</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Quiz" asp-action="UserQuizStats">Test History</a>

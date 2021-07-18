@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuizAndAnswer.Models;
 using System;
@@ -18,33 +19,35 @@ namespace QuizAndAnswer.Controllers {
             this.userManager = userManager;
         }
 
+        [Authorize]
         public ViewResult QuizList() {
             List<Question> questionList = questionContext.Quiz.ToList();
             return View(questionList);
         }
 
+        [Authorize]
         public ViewResult MainQuizDb() {
             return View();
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public ViewResult AddQuestion() {
             return View();
         }
 
         [HttpPost]
         public ViewResult AddQuestion(Question question) {
-            if (!ModelState.IsValid) {
+            if(!ModelState.IsValid) {
                 return View();
             }
 
             question.Id = questionContext.Quiz.ToArray().Last().Id + 1;
             questionContext.Add(question);
             questionContext.SaveChanges();
-            return View("QuestionAdded", question);   
+            return View("QuestionAdded", question);
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public ViewResult Edit(int id) {
             return View(questionContext.GetQuestionById(id));
         }
@@ -62,7 +65,7 @@ namespace QuizAndAnswer.Controllers {
             return View("AddedCorrectly", question);
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public IActionResult Delete(int id) {
             questionContext.Quiz.Remove(questionContext.GetQuestionById(id - 1));
             questionContext.SaveChanges();
@@ -73,9 +76,9 @@ namespace QuizAndAnswer.Controllers {
             return View();
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public ViewResult Test(int questionCount) {
-            if (questionCount <= 0) {
+            if(questionCount <= 0) {
                 ModelState.AddModelError("", "The entered value is below or equal 0");
                 return View("PrepareTest");
             }
@@ -87,11 +90,11 @@ namespace QuizAndAnswer.Controllers {
             List<Question> dbList = questionContext.Quiz.ToList();
             List<Question> examList = new List<Question>();
 
-            while (questionCount != 0) {
+            while(questionCount != 0) {
                 Random rng = new Random();
                 Question selectedQuestion = dbList[rng.Next(0, dbList.Count)];
 
-                if (!examList.Contains(selectedQuestion)) {
+                if(!examList.Contains(selectedQuestion)) {
                     examList.Add(selectedQuestion);
                     questionCount--;
                 }
@@ -111,21 +114,14 @@ namespace QuizAndAnswer.Controllers {
 
             int points = 0;
             int maxPoints = 0;
-            
+
             for(int i = 0; i < questionList.Count; i++) {
                 maxPoints += questionList[i].Points;
                 if(answerList[i] == questionList[i].IsCorrect) {
                     points += questionList[i].Points;
                 }
             }
-            int dataId;
-            if(questionContext.UserData.Any()) {
-                dataId = questionContext.UserData.ToArray().Last().Id + 1;
-            }
-            else {
-                dataId = 1;
-            }
-
+            int dataId = questionContext.UserData.Any() ? questionContext.UserData.ToArray().Last().Id + 1 : 1;
             int userId = int.Parse(userManager.GetUserId(HttpContext.User));
             await questionContext.UserData.AddAsync(new UserQuestionData {
                 Id = dataId,
@@ -143,6 +139,7 @@ namespace QuizAndAnswer.Controllers {
             return View("AnswerList", answerList);
         }
 
+        [Authorize]
         public ViewResult UserQuizStats() {
             int userId = int.Parse(userManager.GetUserId(HttpContext.User));
             IEnumerable<UserQuestionData> questions = questionContext.UserData.Where(p => p.UserId == userId);

@@ -1,0 +1,14 @@
+﻿@model QuizAndAnswer.Models.Account.RoleViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+<form method="post">
+    <div class="form-group">
+        <label>Role name</label>
+        <div><span asp-validation-for="@Model.Name"></span></div>
+        <input asp-for="@Model.Name"/>
+    </div>
+    <input type="submit" value="Add role" />
+</form>

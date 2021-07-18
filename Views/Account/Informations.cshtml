@@ -1,0 +1,25 @@
+﻿@model AppUser
+
+@{ 
+    Layout = "_Layout";
+}
+
+<style>
+    .buttonlike {
+        padding: 5px;
+        outline: 1px solid black;
+    }
+</style>
+<h3>User informations</h3>
+<table class="table">
+    <tr>
+        <th>Username</th>
+        <th>@Model.UserName</th>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <th>@Model.Email</th>
+    </tr>
+</table>
+<a class="btn-info buttonlike" asp-controller="Account" asp-action="ChangePassword">Change password</a>
+<a class="btn-danger buttonlike" asp-controller="Account" asp-action="DeleteUser">Delete account</a>

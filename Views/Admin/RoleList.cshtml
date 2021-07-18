@@ -1,0 +1,18 @@
+﻿@model IEnumerable<AppRole>
+ 
+@{
+    Layout = "_Layout";
+}
+
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+    </tr>
+    @foreach(var role in Model) {
+    <tr>
+        <th>@role.Id</th>
+        <th>@role.Name</th>
+    </tr>
+    }
+</table>

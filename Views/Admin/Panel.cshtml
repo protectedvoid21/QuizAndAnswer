@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Administrator Panel";
+}
+
+<style>
+
+    ul {
+        width: 30%;
+    }
+    .btn-info {
+        margin: 5px;
+        padding: 2px;
+    }
+</style>
+
+<ul>
+    <li class="list-group">
+        <a asp-action="RoleList" class="btn-info">Role list</a>
+    </li>
+    <li class="list-group">
+        <a asp-action="CreateRole" class="btn-info">Add role</a>
+    </li>
+</ul>
