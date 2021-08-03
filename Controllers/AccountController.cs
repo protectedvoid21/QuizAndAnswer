@@ -63,13 +63,18 @@ namespace QuizAndAnswer.Controllers {
             }
 
             AppUser userByEmail = await userManager.FindByEmailAsync(loginModel.Email);
+            if(userByEmail == null) {
+                ViewBag.NotValidMessage = "Incorrect email or password!";
+                return View();
+            }
+
             var result = await signInManager.PasswordSignInAsync(userByEmail, loginModel.Password, false, false);
 
-            if(result.Succeeded) {
-                return RedirectToAction("Index", "Home");
+            if(!result.Succeeded) {
+                ViewBag.NotValidMessage = "Incorrect email or password!";
+                return View();
             }
-            ViewBag.NotValidMessage = "Incorrect email or password!";
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         [Authorize]

@@ -1,0 +1,21 @@
+﻿@model EditUserViewModel
+@inject Microsoft.AspNetCore.Identity.RoleManager<AppRole> roleManager
+
+@{ 
+    Layout = "_Layout";
+}
+
+<p>User ID : @Model.Id</p>
+<form method="post">
+    <div class="form-group">
+        <label>Username</label>
+        <div><span asp-validation-for="@Model.UserName"></span></div>
+        <input asp-for="@Model.UserName" />
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <div><span asp-validation-for="@Model.Email"></span></div>
+        <input asp-for="@Model.Email" />
+    </div>
+    <input type="submit" class="btn-info"/>
+</form>

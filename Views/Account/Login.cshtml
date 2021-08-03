@@ -4,7 +4,9 @@
     Layout = "_Layout";
 }
 
+<h2>Login</h2><hr />
 <form asp-controller="Account" asp-action="Login" method="post">
+    <div class="text-danger">@ViewBag.NotValidMessage</div>
     <div class="form-group">
         <label>Email</label>
         <div><span asp-validation-for="@Model.Email" class="text-danger"></span></div>
